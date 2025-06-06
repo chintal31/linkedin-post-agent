@@ -10,26 +10,15 @@ class ReviewAgent:
         self.model = "llama3-8b-8192"
 
     def review_post(self, draft_post):
-        """
-        Reviews and polishes a draft post based on human feedback.
-
-        Args:
-            draft_post (str): The initial draft post to be reviewed
-
-        Returns:
-            str: The polished post after incorporating human feedback
-        """
         print("\n=== Post Review ===")
         print(f"\nCurrent draft post:\n{draft_post}")
 
-        # Ask if the post is perfect
         is_perfect = input("\nIs this post perfect? (yes/no): ").lower().strip()
 
         if is_perfect == "yes":
             print("\nGreat! Keeping the post as is.")
             return draft_post
 
-        # Get feedback type
         print("\nWhat would you like to do?")
         print("1. Add new points")
         print("2. Remove points")
@@ -62,10 +51,8 @@ class ReviewAgent:
 
         elif choice == "3":
             suggestions = input("\nPlease provide your suggestions for improvement:\n")
-            # Generate prompt for LLM to polish the post
             prompt = self.generate_polish_prompt(draft_post, suggestions)
 
-            # Get polished version from LLM
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[{"role": "user", "content": prompt}],
@@ -78,7 +65,6 @@ class ReviewAgent:
         print("\n=== Updated Post ===")
         print(draft_post)
 
-        # Final confirmation
         final_ok = input("\nIs this version good to go? (yes/no): ").lower().strip()
         if final_ok != "yes":
             return self.review_post(draft_post)  # Recursively review again

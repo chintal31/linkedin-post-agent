@@ -20,7 +20,6 @@ class ResearchAgent:
         response = requests.post(self.url, json=payload)
         data = response.json()
 
-        # Format results as a list of dictionaries containing post information
         posts = []
         for result in data.get("results", []):
             post = {
