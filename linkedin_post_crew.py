@@ -10,7 +10,7 @@ class LinkedInPostCrew:
         self.review_agent = ReviewAgent()
         # self.posting_agent = PostingAgent()
 
-    def run(self, topic):
+    def run(self, topic, is_browser=False):
         print("Step 1: Researching topic...")
         research = self.research_agent.research_topic(topic)
 
@@ -18,7 +18,7 @@ class LinkedInPostCrew:
         draft_post = self.writing_agent.generate_post(topic, research)
 
         print("Step 3: Reviewing post...")
-        final_post = self.review_agent.review_post(draft_post)
+        final_post = self.review_agent.review_post(draft_post, is_browser)
 
         print("Final post: ", final_post)
 

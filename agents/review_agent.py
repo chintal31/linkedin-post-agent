@@ -9,7 +9,14 @@ class ReviewAgent:
         )
         self.model = "llama3-8b-8192"
 
-    def review_post(self, draft_post):
+    def review_post(
+        self, draft_post, is_browser=False, edited_content=None, suggestions=None
+    ):
+        if is_browser:
+            return self._review_post_browser(draft_post, edited_content, suggestions)
+        return self._review_post_terminal(draft_post)
+
+    def _review_post_terminal(self, draft_post):
         print("\n=== Post Review ===")
         print(f"\nCurrent draft post:\n{draft_post}")
 
@@ -67,7 +74,25 @@ class ReviewAgent:
 
         final_ok = input("\nIs this version good to go? (yes/no): ").lower().strip()
         if final_ok != "yes":
-            return self.review_post(draft_post)  # Recursively review again
+            return self._review_post_terminal(draft_post)  # Recursively review again
+
+        return draft_post
+
+    def _review_post_browser(self, draft_post, edited_content=None, suggestions=None):
+        if edited_content and edited_content != draft_post:
+            # If the content was directly edited, use the edited version
+            draft_post = edited_content
+
+        if suggestions:
+            # If suggestions were provided, use them to polish the post
+            prompt = self.generate_polish_prompt(draft_post, suggestions)
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.7,
+                max_tokens=500,
+            )
+            draft_post = response.choices[0].message.content
 
         return draft_post
 

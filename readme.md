@@ -34,10 +34,22 @@ pip install -r requirements.txt
 
 ## Usage
 
-1. Run the main script:
+### Web Interface
+
+1. Run the Flask application:
 
 ```bash
-python main.py
+python web.py
+```
+
+2. Open your web browser and navigate to `http://localhost:5000`
+
+### Command Line Interface
+
+1. Run the cli script:
+
+```bash
+python cli.py
 ```
 
 2. Enter your topic when prompted
@@ -45,3 +57,5 @@ python main.py
    - Research your topic
    - Generate a professional LinkedIn post
    - Display the draft post
+   - Review
+   - Display final post
